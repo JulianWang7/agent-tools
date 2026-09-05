@@ -1,6 +1,7 @@
 # Codex MCP 注册（与 mcp.servers.json 同步维护）
 #
-# 示例：
-# [mcp_servers.julianwang-workflow]
-# command = "julianwang-workflow"
-# args = []
+# 粘贴源：registry\mcp.servers.json → Codex 转 TOML 后的标准形态。
+
+[mcp_servers.julianwang-workflow]
+command = "julianwang-workflow"
+args = []

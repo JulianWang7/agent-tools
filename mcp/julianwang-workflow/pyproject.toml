@@ -1,0 +1,21 @@
+[project]
+name = "julianwang-workflow-mcp"
+version = "0.1.0"
+description = "JulianWang-workflow MCP：个人工作流起点（归档/标准技能维护），command 名 = julianwang-workflow"
+requires-python = ">=3.10"
+dependencies = [
+    "mcp>=1.0",
+]
+
+[project.scripts]
+julianwang-workflow = "server:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["server", "archive", "standards_to_skills"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -3,6 +3,7 @@ __pycache__/
 *.pyc
 .venv/
 uv.lock.bak
+*.egg-info/
 
 # 密钥与环境
 .env
