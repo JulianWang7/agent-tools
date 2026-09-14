@@ -37,7 +37,7 @@ let url = format!(
                 ▼
 ┌─────────────────────────────────┐
 │ 任意目录 clone 副本               │
-│ D:\tools\agent-tools             │
+│ e.g. D:\agent-tools / ~\agent-tools（可 -RepoRoot 指定）│
 └───────────────┬─────────────────┘
                 │ scripts/sync-skills.ps1（单向平铺复制）
                 ▼
@@ -78,13 +78,13 @@ CC Switch v3.12.3+ 只认 `~/.cc-switch/skills/<name>/SKILL.md` 一级结构；`
 ## 运行方式
 
 ```powershell
-# 首次/默认（当前机器）
+# 首次/默认（自动探测仓库位置）
 powershell -ExecutionPolicy Bypass -File scripts\sync-skills.ps1
 
 # 只看不改
 powershell -ExecutionPolicy Bypass -File scripts\sync-skills.ps1 -DryRun
 
-# B 机（clone 路径不同）
+# B 机（clone 路径不同，用 -RepoRoot 指定；不必改脚本）
 powershell -ExecutionPolicy Bypass -File scripts\sync-skills.ps1 -RepoRoot "D:\tools\agent-tools"
 
 # 远端有更新时不自动 pull，只同步本地已 pull 的内容
@@ -92,6 +92,26 @@ powershell -ExecutionPolicy Bypass -File scripts\sync-skills.ps1 -NoAutoPull
 ```
 
 > PowerShell 执行策略：用 `-ExecutionPolicy Bypass` 即可，无需改系统策略。GUI 双击 .ps1 不会直接跑，请用终端 / 右键「使用 PowerShell 运行」。
+
+## 路径策略（多机零修改）
+
+脚本**不写死仓库路径**，按以下顺序定位：
+
+1. 显式指定 `-RepoRoot`（优先级最高，笔记本 clone 到任意位置都用它）；
+2. 未指定时自动探测常见位置：
+   - `D:\agent-tools`
+   - `~\agent-tools`
+   - `~\Desktop\agent-tools`
+   - `~\Documents\agent-tools`
+   - `~\source\agent-tools`
+   - `~\repos\agent-tools`
+3. 找到第一个同时包含 `.git` 与 `skills/` 的目录即采用（并打印「自动探测仓库: …」）；
+4. 全没找到时报错并列候选清单，提示用 `-RepoRoot`。
+
+所以：
+- **本机（台式机）**：仓库在 `D:\agent-tools`，直接跑脚本即可;
+- **笔记本**：先 `git clone git@github.com:JulianWang7/agent-tools.git` 到自己喜欢的位置；若没放在候选路径里，加 `-RepoRoot` 指一下；也可以 clone 到 `~\agent-tools` 免参数。
+- 两台机器**不必路径一致**——内容是 git 传的、状态是 WebDAV 传的，路径由各机自定。
 
 ## 常见问题
 
