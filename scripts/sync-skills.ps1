@@ -9,6 +9,11 @@
 #   powershell -ExecutionPolicy Bypass -File scripts\sync-skills.ps1 -DryRun
 #   powershell -ExecutionPolicy Bypass -File scripts\sync-skills.ps1 -RepoRoot "D:\tools\agent-tools"
 #
+# 路径策略（无需改脚本！）：
+#   - 不指定 -RepoRoot 时，自动探测常见位置（D:\agent-tools / ~\agent-tools /
+#     ~\Desktop\agent-tools / ~\Documents\agent-tools 等），找到带 .git + skills/ 的即用；
+#   - 笔记本 clone 到别处？用 -RepoRoot 指一下即可（或 clone 到上面任一位置免参数）。
+#
 # 说明：
 #   - git clone 由人来做（一次）；检测/同步由脚本自动完成
 #   - 默认会 git fetch 检测远端更新；有更新且工作区干净时自动 pull（可用 -NoAutoPull 关闭）
@@ -18,11 +23,11 @@
 # 注意：脚本须以 UTF-8 with BOM 保存，否则 Windows PowerShell 5.1 中文解析出错。
 
 param(
-    [string]$RepoRoot = "$HOME\Desktop\agent-tools",   # 本机 clone 路径（B 机改成自己的路径）
+    [string]$RepoRoot = "",                          # 留空则自动探测下面候选列表
     [string]$Branch = "main",
-    [string]$SsotRoot = "$HOME\.cc-switch\skills",     # CC Switch 技能 SSOT
-    [switch]$DryRun,                                   # 只报告，不复制 / 不 pull
-    [switch]$NoAutoPull                                # 检测到远端更新时不自动 pull，仅提示
+    [string]$SsotRoot = "$HOME\.cc-switch\skills",   # CC Switch 技能 SSOT
+    [switch]$DryRun,                                 # 只报告，不复制 / 不 pull
+    [switch]$NoAutoPull                              # 检测到远端更新时不自动 pull，仅提示
 )
 
 $ErrorActionPreference = "Continue"  # 外部命令 stderr 不触发异常，一律看 $LASTEXITCODE
@@ -31,13 +36,37 @@ $ErrorActionPreference = "Continue"  # 外部命令 stderr 不触发异常，一
 try { [Console]::OutputEncoding = [System.Text.Encoding]::UTF8 } catch { }
 try { $OutputEncoding = [System.Text.Encoding]::UTF8 } catch { }
 
-$srcRoot = Join-Path $RepoRoot "skills"
-$manifestPath = Join-Path $SsotRoot ".agent-tools-sync.json"
-
 function Write-Step($msg) { Write-Host "==> $msg" -ForegroundColor Cyan }
 function Write-Ok($msg)   { Write-Host "    $msg" -ForegroundColor Green }
 
-# ---------- 0. 前置校验 ----------
+# ---------- 0. 仓库路径：未指定则自动探测常见位置 ----------
+if (-not $RepoRoot) {
+    $candidates = @(
+        "D:\agent-tools",
+        (Join-Path $HOME "agent-tools"),
+        (Join-Path $HOME "Desktop\agent-tools"),
+        (Join-Path $HOME "Documents\agent-tools"),
+        (Join-Path $HOME "source\agent-tools"),
+        (Join-Path $HOME "repos\agent-tools")
+    )
+    foreach ($c in $candidates) {
+        if ((Test-Path (Join-Path $c ".git")) -and (Test-Path (Join-Path $c "skills"))) {
+            $RepoRoot = $c
+            Write-Ok "自动探测仓库: $RepoRoot"
+            break
+        }
+    }
+    if (-not $RepoRoot) {
+        Write-Error "未找到 agent-tools 仓库（试过: $($candidates -join ', ')）。请用 -RepoRoot 指定 clone 路径。"
+        exit 1
+    }
+}
+
+# 仓库定位完成后才计算 skill 源目录 / manifest 路径
+$srcRoot = Join-Path $RepoRoot "skills"
+$manifestPath = Join-Path $SsotRoot ".agent-tools-sync.json"
+
+# ---------- 0b. 前置校验 ----------
 if (-not (Test-Path $RepoRoot))      { Write-Error "仓库不存在: $RepoRoot"; exit 1 }
 if (-not (Test-Path (Join-Path $RepoRoot ".git"))) { Write-Error "不是 git 仓库: $RepoRoot"; exit 1 }
 if (-not (Test-Path $srcRoot))       { Write-Error "仓库 skills 目录不存在: $srcRoot"; exit 1 }
