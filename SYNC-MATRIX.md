@@ -10,8 +10,10 @@
 | Claude Code | CC Switch → `~/.claude.json` | CC Switch 仓库安装 → `~/.claude/skills` | CC Switch Update All | CC Switch |
 | Codex | CC Switch → `~/.codex/config.toml` | CC Switch → `~/.codex/skills` | CC Switch Update All | CC Switch |
 | Hermes（延后） | CC Switch → `~/.hermes/config.yaml` | CC Switch → `~/.hermes/skills` | CC Switch Update All | CC Switch |
-| Cursor | `scripts/bootstrap.ps1` → `~/.cursor/mcp.json`（源 = `registry/mcp.servers.json`） | bootstrap 软链 → `~/.cursor/skills` | `git pull`（软链直读） | bootstrap |
-| QwenPaw | 控制台粘贴 `registry/mcp.servers.json` 片段 | `config.json` `skill_paths` → 本仓 clone 目录 | `git pull`（原地读） | bootstrap + 手动一次 |
+| Cursor | `scripts/bootstrap.ps1` → `~/.cursor/mcp.json`（源 = `registry/mcp.servers.json`） | bootstrap 软链/目录联接 → `~/.cursor/skills`（及可选 `D:\Workspace\.cursor\skills`） | `git pull`（软链直读） | bootstrap |
+| QwenPaw | 控制台粘贴 `registry/mcp.servers.json` 片段 | `config.json` `skill_paths` → 本仓 `skills/`；`skill_pool/<name>` 可目录联接 | `git pull`（原地读） | bootstrap + 手动一次 |
+
+已入仓技能示例：`github-commit-sop`（GitHub）、`gerrit-commit-sop`（Gerrit `refs/for`）。
 
 ## 共同约定
 
