@@ -1,0 +1,36 @@
+@startuml FIG-ACT-01_活动图
+!theme materia-outline
+title 图 X-Y 驱动加载测试活动
+<style>
+diagram {
+  FontName "Noto Sans CJK SC";
+  FontSize 12;
+}
+diamond {
+  FontColor #202124;
+  LineColor #70757A;
+}
+</style>
+start
+:编写 DTS 节点;
+:实现 platform_driver;
+:注册 cdev;
+note right: **① 驱动实现**
+
+if (注册成功?) then (是)
+  :创建 /dev/hello;
+  :执行 ioctl 测试;
+  if (测试通过?) then (是)
+    :记录结果;
+  else (否)
+    :定位修复回归;
+  endif
+else (否)
+  :定位修复重试;
+endif
+note right: **② 测试验证**
+
+:生成测试报告;
+stop
+note right: **③ 交付归档**
+@enduml

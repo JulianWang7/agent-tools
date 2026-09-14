@@ -1,0 +1,24 @@
+@startuml FIG-COMP-01_组件图
+!theme materia-outline
+left to right direction
+title 图 X-Y 组件关系
+<style>
+diagram {
+  FontName "Noto Sans CJK SC";
+  FontSize 13;
+}
+</style>
+interface "IHelloService" as ISvc
+interface "IHelloHAL" as IHAL
+component "App" as App
+component "Manager" as Mgr
+component "JNI" as JNI
+component "HAL" as HAL
+component "Driver" as Drv
+App ..> ISvc
+Mgr --() ISvc
+Mgr ..> IHAL
+HAL --() IHAL
+JNI --> HAL : dlopen
+HAL --> Drv : ioctl
+@enduml

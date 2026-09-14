@@ -1,0 +1,24 @@
+@startuml FIG-STATE-01_状态图
+!theme materia-outline
+title 图 X-Y 设备状态
+<style>
+diagram {
+  FontName "Noto Sans CJK SC";
+  FontSize 13;
+}
+state {
+  FontColor #202124;
+  AttributeFontColor #202124;
+}
+</style>
+[*] --> 未初始化
+未初始化 --> 初始化中 : probe()
+初始化中 --> 就绪 : cdev 注册成功
+初始化中 --> 错误 : 注册失败
+就绪 --> 打开 : open()
+打开 --> 使用中 : ioctl/read/write
+使用中 --> 打开 : release()
+打开 --> 就绪 : close()
+错误 --> 未初始化 : 重新加载
+就绪 --> [*] : remove()
+@enduml

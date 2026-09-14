@@ -1,0 +1,22 @@
+@startuml FIG-SEQ-01_调用时序图
+!theme materia-outline
+title 图 X-Y 调用时序
+<style>
+diagram {
+  FontName "Noto Sans CJK SC";
+  FontSize 12;
+}
+</style>
+
+actor "用户" as User
+participant "App" as App
+participant "HAL" as HAL
+participant "Driver" as Drv
+User -> App: hello()
+App -> HAL: hal_open()
+HAL -> Drv: ioctl(HELLO_IOCTL)
+Drv --> HAL: 返回数据
+HAL --> App: 返回结果
+App --> User: 显示
+note over HAL, Drv: 需 SELinux 策略
+@enduml

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Standards to Skills"
+  short_description: "Generate, track, and synchronize standards-backed Agent Skills"

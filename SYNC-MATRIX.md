@@ -13,7 +13,9 @@
 | Cursor | `scripts/bootstrap.ps1` → `~/.cursor/mcp.json`（源 = `registry/mcp.servers.json`） | bootstrap 软链/目录联接 → `~/.cursor/skills`（及可选 `D:\Workspace\.cursor\skills`） | `git pull`（软链直读） | bootstrap |
 | QwenPaw | 控制台粘贴 `registry/mcp.servers.json` 片段 | `config.json` `skill_paths` → 本仓 `skills/`；`skill_pool/<name>` 可目录联接 | `git pull`（原地读） | bootstrap + 手动一次 |
 
-已入仓技能示例：`github-commit-sop`（GitHub）、`gerrit-commit-sop`（Gerrit `refs/for`）。
+已入仓技能示例：`github-commit-sop`（GitHub）、`gerrit-commit-sop`（Gerrit `refs/for`）、`create-review-uml-diagrams`（STD-004 UML）、`standards-to-skills`（规范→Skill 路由；工具仓仍为 `D:\Workspace\tools\standards-to-skills`）。
+
+**不入本仓**：android-bugfix-flow 转换 skill、Cursor 内置 `skills-cursor`、第三方 MCP。
 
 ## 共同约定
 

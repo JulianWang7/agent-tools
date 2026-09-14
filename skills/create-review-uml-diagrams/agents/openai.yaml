@@ -1,0 +1,3 @@
+interface:
+  display_name: "STD-004 UML Diagrams"
+  short_description: "Create and review UML with PlantUML-first, SVG-pair delivery"

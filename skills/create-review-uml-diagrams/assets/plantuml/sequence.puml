@@ -1,0 +1,23 @@
+@startuml FIG-USE-01_用例图
+!theme materia-outline
+left to right direction
+title 图 X-Y 系统用例
+<style>
+diagram {
+  FontName "Noto Sans CJK SC";
+  FontSize 13;
+}
+</style>
+actor "开发者" as Dev
+actor "管理员" as Admin
+rectangle "Hello 驱动系统" {
+  usecase "打开设备" as UC1
+  usecase "读写数据" as UC2
+  usecase "配置参数" as UC3
+}
+Dev --> UC1
+Dev --> UC2
+Admin --> UC3
+UC2 ..> UC1 : <<include>>
+UC3 ..> UC1 : <<include>>
+@enduml

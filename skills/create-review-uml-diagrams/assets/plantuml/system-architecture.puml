@@ -1,0 +1,47 @@
+@startuml FIG-ARCH-01_系统架构图
+!theme materia-outline
+left to right direction
+title 图 X-Y 系统分层架构
+<style>
+diagram {
+  FontName "Noto Sans CJK SC";
+  FontSize 13;
+}
+rectangle {
+  BackGroundColor #EAF2F8;
+  BorderColor #3D6D8E;
+  FontColor #1F3442;
+  RoundCorner 8;
+}
+package {
+  BackGroundColor #F5F6F7;
+  BorderColor #70757A;
+  FontStyle bold;
+}
+arrow {
+  Color #70757A;
+  FontSize 11;
+}
+</style>
+package "应用层" {
+  rectangle "App" as App
+}
+package "框架层" {
+  rectangle "Manager" as Mgr
+}
+package "Native/HAL" {
+  rectangle "JNI" as JNI
+  rectangle "HAL" as HAL
+}
+package "内核层" {
+  rectangle "Driver" as Drv
+  database "/dev/hello" as Dev
+}
+cloud "外部系统" as Ext #F2F3F5
+App --> Mgr : Binder IPC
+Mgr --> JNI : JNI 调用
+JNI --> HAL : HAL 接口
+HAL --> Drv : ioctl
+Drv --> Dev
+App ..> Ext : 网络
+@enduml
