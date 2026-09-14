@@ -42,6 +42,9 @@
 | `gerrit-commit-sop` | skill | Gerrit `refs/for` 上库 |
 | `create-review-uml-diagrams` | skill | STD-004 UML |
 | `standards-to-skills` | skill | 规范→Skill 路由（工具仓仍可在 `D:\Workspace\tools\standards-to-skills`） |
+| `cit-debug-archive` | skill | Cursor debug 对话归档（实时 + 周提炼），来源 QwenPaw（2026-09-14 入仓） |
+| `cit-design-doc-align` | skill | CIT 设计文档对齐项目颗粒度，来源 QwenPaw（2026-09-14 入仓） |
+| `training-flow` | skill | 培训任务执行流程路由器（**已停用**，仅历史存档，来源 QwenPaw 2026-09-14 入仓） |
 | `julianwang-workflow` | mcp | 个人归档等工作流 MCP |
 
 ## 装载矩阵
