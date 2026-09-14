@@ -3,17 +3,19 @@
 > 目的：每个平台的「配置源 / 文件源 / 更新方式」唯一归属，防止同一 MCP/技能出现两个配置源。
 > 更新规则：任何平台装载方式变化，先改这张表，再改实现。
 
-## 当前归属（2026-09-05 定稿）
+## 当前归属（2026-09-14 更新：仓库私有化 → 本地 SSOT 模式）
 
 | 平台 | MCP 配置源 | Skill 装载源 | 更新方式 | 由谁管 |
 |------|-----------|-------------|---------|--------|
-| Claude Code | CC Switch → `~/.claude.json` | CC Switch 仓库安装 → `~/.claude/skills` | CC Switch Update All | CC Switch |
-| Codex | CC Switch → `~/.codex/config.toml` | CC Switch → `~/.codex/skills` | CC Switch Update All | CC Switch |
-| Hermes（延后） | CC Switch → `~/.hermes/config.yaml` | CC Switch → `~/.hermes/skills` | CC Switch Update All | CC Switch |
+| Claude Code | CC Switch → `~/.claude.json` | **sync-skills.ps1 → `~/.cc-switch/skills`（本地 SSOT）** → CC Switch 分发 `~/.claude/skills` | `git pull` + `scripts/sync-skills.ps1` | sync 脚本 |
+| Codex | CC Switch → `~/.codex/config.toml` | **sync-skills.ps1 → `~/.cc-switch/skills`（本地 SSOT）** → CC Switch 分发 `~/.codex/skills` | `git pull` + `scripts/sync-skills.ps1` | sync 脚本 |
+| Hermes（延后） | CC Switch → `~/.hermes/config.yaml` | **sync-skills.ps1 → `~/.cc-switch/skills`（本地 SSOT）** → CC Switch 分发 `~/.hermes/skills` | `git pull` + `scripts/sync-skills.ps1` | sync 脚本 |
 | Cursor | `scripts/bootstrap.ps1` → `~/.cursor/mcp.json`（源 = `registry/mcp.servers.json`） | bootstrap 软链/目录联接 → `~/.cursor/skills`（及可选 `D:\Workspace\.cursor\skills`） | `git pull`（软链直读） | bootstrap |
 | QwenPaw | 控制台粘贴 `registry/mcp.servers.json` 片段 | `config.json` `skill_paths` → 本仓 `skills/`；`skill_pool/<name>` 可目录联接 | `git pull`（原地读） | bootstrap + 手动一次 |
 
-已入仓技能示例：`github-commit-sop`（GitHub）、`gerrit-commit-sop`（Gerrit `refs/for`）、`create-review-uml-diagrams`（STD-004 UML）、`standards-to-skills`（规范→Skill 路由；工具仓仍为 `D:\Workspace\tools\standards-to-skills`）。
+> **2026-09-14 变更原因**：仓库改为 **private** 后，CC Switch 的「仓库安装」通道（匿名拉 GitHub ZIP）无法访问私有仓库（404 `DOWNLOAD_FAILED`）。改用 **git 私有仓库传内容 + CC Switch 本地 SSOT 装载** 的组合，详见 `docs/sync-mode-private.md`。
+
+已入仓技能示例：`github-commit-sop`、`gerrit-commit-sop`、`create-review-uml-diagrams`、`standards-to-skills`、`cit-debug-archive`、`cit-design-doc-align`、`training-flow`（已停用，历史存档）。
 
 **不入本仓**：android-bugfix-flow 转换 skill、Cursor 内置 `skills-cursor`、第三方 MCP。
 

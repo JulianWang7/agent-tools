@@ -51,6 +51,8 @@
 
 见 `SYNC-MATRIX.md`。各平台「配置源 / 文件源 / 更新方式」尽量单一归属，减少双源漂移。
 
+> **私有仓库模式（2026-09-14）**：仓库为 private 后，CC Switch 无法直接「仓库安装」私有仓库；改用 **git 私有仓库传内容 + CC Switch 本地 SSOT 装载**：`git pull`（或 `scripts/sync-skills.ps1` 自动检测+pull）→ 同步到 `~/.cc-switch/skills` → CC Switch 识别为本地 skill 分发。详见 [`docs/sync-mode-private.md`](docs/sync-mode-private.md)。
+
 ## push-first 工作流（维护纪律）
 
 1. 本地改（skill / MCP）  
@@ -59,7 +61,7 @@
 4. 各平台按 SYNC-MATRIX 更新（软链直读 / `git pull` / CC Switch Update All）  
 5. 有则跑 `scripts/check.ps1`
 
-> CC Switch 若绑的是 **GitHub 远端**：本地改完必须 push，再在面板 Update All。
+> **私有仓库模式下**：推送后，其它机器执行 `scripts/sync-skills.ps1`（自动 pull + 同步到 CC Switch SSOT），再在 CC Switch 技能页点刷新。
 
 ## 新增技能规范
 
